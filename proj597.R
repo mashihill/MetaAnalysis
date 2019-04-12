@@ -8,6 +8,7 @@ data2 <- data.frame(group=sample(1:2,n2,replace=TRUE), matrix(rnorm(p*n2),ncol=p
 library(dplyr)
 library(JumpTest)
 
+
 num.data = 2
 
 p.matrix = matrix(NA, nrow = num.data, ncol = p)
