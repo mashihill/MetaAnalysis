@@ -1,2 +1,9 @@
 Package: MetaAnalysis
 Version: 0.1
+Date: 2019-04-19
+Title: MetaAnalysis
+Description: MS 597 project
+Author: Yen-An Chen <yen-an.chen@stonybrook.edu>
+Maintainer: Yen-An Chen <yen-an.chen@stonybrook.edu>
+RoxygenNote: 6.1.1
+License: MIT + file LICENSE
