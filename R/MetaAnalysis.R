@@ -1,15 +1,16 @@
-set.seed(123)
-p <- 5
-n1 <- 20
-n2 <- 15
-n3 = 30
-data1 <- data.frame(group=sample(1:3,n1,replace=TRUE), matrix(rnorm(p*n1),ncol=p))
-data2 <- data.frame(group=sample(1:2,n2,replace=TRUE), matrix(rnorm(p*n2),ncol=p))
-data3 <- data.frame(group=sample(1:3,n3,replace=TRUE), matrix(rnorm(p*n3),ncol=p))
-data.list = list(data1, data2, data3)
-
 library(dplyr)
 library(JumpTest)
+
+set.seed(123)
+p <- 8
+n1 <- 20
+n2 <- 15
+n3 <- 30
+data1 <- data.frame(group=sample(1:3,n1,replace=TRUE), matrix(rnorm(p*n1),ncol=p))
+data2 <- data.frame(group=sample(1:2,n2,replace=TRUE), matrix(rnorm(p*n2),ncol=p))
+data3 <- data.frame(group=sample(2:5,n3,replace=TRUE), matrix(rnorm(p*n3),ncol=p))
+data.list = list(data1, data2, data3)
+
 
 num.data = length(data.list)
 
@@ -64,22 +65,16 @@ my.aov = function(data) {
       shapiro.vec <- c(shapiro.vec, shapiro.test(get(bioname, subdf))$p.value)
     }
     
-    isNormal = T
-    if (min(shapiro.vec) < 0.05) {
-      isNormal = F
-    }
-    
     if (length(unique(data$group)) > 2) {
-      if (isNormal == F) {
-        print('Kruskal')
+      if (min(shapiro.vec) < 0.05) {
+        #print('Kruskal')
         test.performed = c(test.performed, 'Kruskal')
         
         res.aov = kruskal.test(as.formula(paste(bioname, "~ factor(group)")), data = data)
         p.val = res.aov$p.value
       } else {
-        print('Anova')
+        #print('Anova')
         test.performed = c(test.performed, 'Anova')
-        print(test.performed)
         res.aov = aov(as.formula(paste(bioname, "~ factor(group)")), data = data)
         p.val = summary(res.aov)[[1]][["Pr(>F)"]][[1]]
       }
@@ -89,21 +84,21 @@ my.aov = function(data) {
       subdf1 <- subset(x=data, subset=group==unique(data$group[1]))
       subdf2 <- subset(x=data, subset=group==unique(data$group[2]))
       
-      if (isNormal == T) {
+      if (min(shapiro.vec) >= 0.05) {
         fp <- var.test(get(bioname, subdf1), get(bioname, subdf2))$p.value
         
         if(fp>0.05) {  #equal variance
-          print('Equal T')
+          #print('Equal T')
           test.performed = c(test.performed, 'Equal T')
           p.val <- t.test(get(bioname, subdf1),get(bioname, subdf2),var.equal=T)$p.value
         } else {
-          print('Unequal T')
+          #print('Unequal T')
           test.performed = c(test.performed, 'Unequal T')
           p.val <- t.test(get(bioname, subdf1),get(bioname, subdf2),var.equal=F)$p.value
         }
       
       } else {
-        print('Wilcox')
+        #print('Wilcox')
         test.performed = c(test.performed, 'Wilcox')
         p.val <- wilcox.test(get(bioname, subdf1),get(bioname, subdf2))$p.value
       }
@@ -119,8 +114,9 @@ my.aov = function(data) {
 
 ## Main
 for (i in 1:length(data.list)) {
-  p.matrix[i,] = my.aov(data.list[[i]])$p.value.vec
-  test.performed = c(test.performed, my.aov(data.list[[i]])$test.performed)
+  res = my.aov(data.list[[i]])
+  p.matrix[i,] = res$p.value.vec
+  test.performed = c(test.performed, res$test.performed)
 }
 
 for (i in 1:dim(p.matrix)[2]) {
@@ -136,7 +132,9 @@ pooled.p.matrix
 
 unique(test.performed)
 
-#rbind(ppool(t(p.matrix), method = "FI")@pvalue,
-#      ppool(t(p.matrix), method = "SI")@pvalue,
-#      ppool(t(p.matrix), method = "MI")@pvalue,
-#      ppool(t(p.matrix), method = "MA")@pvalue)
+if (T) {
+rbind(ppool(t(p.matrix), method = "FI")@pvalue,
+      ppool(t(p.matrix), method = "SI")@pvalue,
+      ppool(t(p.matrix), method = "MI")@pvalue,
+      ppool(t(p.matrix), method = "MA")@pvalue)
+}
