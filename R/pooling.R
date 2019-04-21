@@ -1,5 +1,3 @@
-library(JumpTest)
-
 fisher.pool = function(p.vals) {
   X2 = -2*sum(log(p.vals))
   pooled.p = pchisq(X2, 2*length(p.vals), lower.tail = F)
