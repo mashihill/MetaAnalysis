@@ -1,5 +1,5 @@
 library(dplyr)
-source('./MetaAnalysis.R')
+source('./meta.analysis.R')
 
 set.seed(123)
 #p <- 100
