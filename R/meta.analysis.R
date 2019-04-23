@@ -1,4 +1,4 @@
-library(dplyr)
+#library(dplyr)
 library(JumpTest)
 source('./pooling.R')
 source('./my.aov.R')

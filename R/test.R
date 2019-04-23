@@ -1,4 +1,4 @@
-library(dplyr)
+#library(dplyr)
 source('./meta.analysis.R')
 
 set.seed(123)
