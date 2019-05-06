@@ -1,20 +1,32 @@
-library(JumpTest)
+#library(JumpTest)
 source('./R/pooling.R')
 source('./R/my.aov.R')
 
 #' Illustration of meta.analysis()
 #'
-#' Creates a plot of the crayon colors in \code{\link{brocolors}}
-#'
-#' @param p.vals vector of p-values
-#'
-#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#' @param ... Dataframe, at least 2 and up to 5 dataframes.
+#' @param method String or vector of string, containing one of the following (case sensitive): \code{'Fisher', 'Stouffer', 'minP', 'maxP'}.
+#' @param alpha The significance level to use within statistical test, default = 0.05
+#' 
+#' @return A list with components:
+#' \describe{
+#'   \item{\code{p.matrix}}{A p-values matrix of dimension (number of dataframes, number of biomarkers).}
+#'   \item{\code{pooled.p.matrix}}{A matrix of pooled p-values for each biomarkers.}
+#'   \item{\code{test.performed}}{A list of method (\code{string}) of statistical test used.}
+#' }
 #'
 #' @examples
 #' data1 <- data.frame(group=sample(1:3,200,replace=TRUE), matrix(rnorm(100*200),ncol=100))
 #' data2 <- data.frame(group=sample(1:2,150,replace=TRUE), matrix(rnorm(100*150),ncol=100))
+#' data3 <- data.frame(group=sample(1:4,400,replace=TRUE), matrix(rnorm(100*400),ncol=100))
 #' 
-#' res = meta.analysis(data1, data2, method='test')
+#' 
+#' res = meta.analysis(data1, data2, method='Fisher')
+#' p.matrix = res$p.matrix
+#' pooled.p.matrix = res$pooled.p.matrix
+#' test.performed = res$test.performed
+#'
+#' res = meta.analysis(data1, data2, data3, method=c('Stouffer', 'minP', 'maxP'))
 #' p.matrix = res$p.matrix
 #' pooled.p.matrix = res$pooled.p.matrix
 #' test.performed = res$test.performed
@@ -37,7 +49,7 @@ meta.analysis = function(..., method='Fisher', alpha=0.05) {
     stop("Number of data is greater than 5.")
   }
   
-  if (!all(sapply(data.list, function(x) {return(dim(x)[2]-1)}) == p)) {
+  if (!all(sapply(data.list, dim)[2,] == (p+1))) {
     stop("Number of columns are different.")
   }
   
@@ -45,7 +57,6 @@ meta.analysis = function(..., method='Fisher', alpha=0.05) {
     stop("Invalid method provided.")
   }
 
-  
   ### Output initialization
   p.matrix = matrix(NA, nrow = num.data, ncol = p)
   colnames(p.matrix) = names(data.list[[1]][-1])

@@ -1,10 +1,8 @@
 #' Illustration of fisher.pool()
 #'
-#' Creates a plot of the crayon colors in \code{\link{brocolors}}
-#'
 #' @param p.vals vector of p-values
 #'
-#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#' @return Return a pooled p-values calculated by Fisher's pooling method.
 #'
 #' @examples
 #' x = runif(10)
@@ -20,15 +18,13 @@ fisher.pool = function(p.vals) {
 
 #' Illustration of stouffer.pool()
 #'
-#' Creates a plot of the crayon colors in \code{\link{brocolors}}
-#'
 #' @param p.vals vector of p-values
 #'
-#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#' @return Return a pooled p-values calculated by Stouffer's pooling method.
 #'
 #' @examples
 #' x = runif(10)
-#' fisher.pool(x)
+#' stouffer.pool(x)
 #'
 #' @export
 #' 
@@ -41,15 +37,13 @@ stouffer.pool = function(p.vals) {
 
 #' Illustration of min.pool()
 #'
-#' Creates a plot of the crayon colors in \code{\link{brocolors}}
-#'
 #' @param p.vals vector of p-values
 #'
-#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#' @return Return a pooled p-values calculated by minP pooling method.
 #'
 #' @examples
 #' x = runif(10)
-#' fisher.pool(x)
+#' min.pool(x)
 #'
 #' @export
 #' 
@@ -62,15 +56,13 @@ min.pool = function(p.vals) {
 
 #' Illustration of max.pool()
 #'
-#' Creates a plot of the crayon colors in \code{\link{brocolors}}
-#'
 #' @param p.vals vector of p-values
 #'
-#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#' @return Return a pooled p-values calculated by maxP pooling method.
 #'
 #' @examples
 #' x = runif(10)
-#' fisher.pool(x)
+#' max.pool(x)
 #'
 #' @export
 #' 

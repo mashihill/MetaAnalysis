@@ -2,10 +2,13 @@ Package: MetaAnalysis
 Version: 0.1
 Date: 2019-04-19
 Title: MetaAnalysis
-Description: MS 597 project
-Author: Yen-An Chen <yen-an.chen@stonybrook.edu>
+Description: AMS 597 project
+Authors@R: c(
+    person("Yen-An", "Chen", email = "yen-an.chen@stonybrook.edu", role = "cre"),
+    person("Winston", "Chang", email = "winston@rstudio.com", role = "aut"))
 Maintainer: Yen-An Chen <yen-an.chen@stonybrook.edu>
 RoxygenNote: 6.1.1
 License: MIT + file LICENSE
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
+Encoding: UTF-8

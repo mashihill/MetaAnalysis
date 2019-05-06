@@ -1,6 +1,6 @@
 ---
-title: "Pooling Method + Example"
-author: "Wendy"
+title: "Introduction to MetaAnalysis"
+author: "TODO"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -12,6 +12,50 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+Introduction
+------------
+
+The purpose of this package is to take a series of data sets containing p biomarkers as represented in the columns of the data frame, and calculate a series of p-values for each column, as well as run a pooling method based on user input.
+
+Installing
+----------
+
+The easiest way to get mega.analysis is to install the whole package, use the following :
+
+`install.packages(mega.analysis)`
+
+And then to load it, use the following:
+
+`library(mega.analysis)`
+
+Workflow
+--------
+
+The package will not take less than two data frames and no more than five. In addition, the package will not run unless the number of columns between all the data frames is the same. The amount rows in each data set do not have to be the same, however, each row must be organized into a numeric group in a column placed before all the biomarkers. The number of groups in each data frame must also all be the same. 
+
+The package will not take less than two data frames and no more than five. In addition, the package will not run unless the number of columns between all the data frames is the same. The amount rows in each data set do not have to be the same, however, each row must be organized into a numeric group in a column placed before all the biomarkers. The number of groups in each data frame must also all be the same. 
+
+The second function of this package is to take the collection of p-values and pool them by biomarker. Each biomarker will undergo pooling based on four tests (As highlighted in the “Pooling Methods” Section), the Fisher, Stouffer, Minimum p-value (minP), and Maximum p-value (maxP). If one of these tests is specified in the “type” parameter, the package will then provide a list of p-values based on that test. If any other input is made, the package will output all the tests at once.
+
+you can use: `meta.analysis(...,method)` to compute pooled p value for different biomarkers by using four different methods: Fisher, Stouffer, Maxium p value and Minium P value.
+
+**Pooling Commands**
+
++ Fisher: set 	method=”Fisher”
++ Stouffer: set	 method=”Stouffer”
++ MinP: set 	method=”minP”
++ MaxP: set 	method=”maxP”
+
+```{r, eval=F}
+set.seed(123)
+p <- 10
+data1 <- data.frame(group=sample(1:3,20,replace=TRUE),matrix(rnorm(p*20),ncol=p))
+data2 <- data.frame(group=sample(1:2,15,replace=TRUE),matrix(rnorm(p*15),ncol=p))
+meta.analysis(data1,data2)
+```
+
+
+*Please note that setting the type is case sensitive, and will default to all cases if not. Ex: typing “stouffer” instead of “Stouffer” will output all tests instead of just the Stouffer test.*
 
 # Pooling Methods
 

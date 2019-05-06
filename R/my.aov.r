@@ -1,14 +1,18 @@
 #' Illustration of my.aov()
 #'
-#' Creates a plot of the crayon colors in \code{\link{brocolors}}
+#' @param data Dataframe with the first column as group, other columns are biomarkers
+#' @param alpha The significance level to use within statistical test, default = 0.05
 #'
-#' @param p.vals vector of p-values
-#'
-#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#' @return A list with components:
+#' \describe{
+#'   \item{\code{p.value.vec}}{A vector of p-values for each biomarkers.}
+#'   \item{\code{test.performed}}{A vector of method (\code{string}) of statistical test used.}
+#' }
 #'
 #' @examples
-#' x = runif(10)
-#' fisher.pool(x)
+#' data <- data.frame(group=sample(1:3,200,replace=TRUE), matrix(rnorm(6*200),ncol=6))
+#' res = my.aov(data.list, 0.1)
+#' res$p.value.vec
 #'
 #' @export
 #' 
