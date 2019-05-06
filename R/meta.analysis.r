@@ -1,18 +1,34 @@
-#library(dplyr)
 library(JumpTest)
-source('./pooling.R')
-source('./my.aov.R')
+source('./R/pooling.R')
+source('./R/my.aov.R')
 
-meta.analysis = function(..., method) {
-  
-  ## TODO: method
+#' Illustration of meta.analysis()
+#'
+#' Creates a plot of the crayon colors in \code{\link{brocolors}}
+#'
+#' @param p.vals vector of p-values
+#'
+#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#'
+#' @examples
+#' data1 <- data.frame(group=sample(1:3,200,replace=TRUE), matrix(rnorm(100*200),ncol=100))
+#' data2 <- data.frame(group=sample(1:2,150,replace=TRUE), matrix(rnorm(100*150),ncol=100))
+#' 
+#' res = meta.analysis(data1, data2, method='test')
+#' p.matrix = res$p.matrix
+#' pooled.p.matrix = res$pooled.p.matrix
+#' test.performed = res$test.performed
+#'
+#' @export
+#' 
+meta.analysis = function(..., method='Fisher', alpha=0.05) {
   
   data.list = list(...)
   num.data = length(data.list)
   p = dim(data.list[[1]])[2] - 1
+  method = c(method)
   
-  
-  ## Error handling
+  ### Error handling
   if (num.data < 2) {
     stop("Number of data is less than 2.")
   }
@@ -25,41 +41,54 @@ meta.analysis = function(..., method) {
     stop("Number of columns are different.")
   }
   
+  if (!all(method %in% c("Fisher", "Stouffer", "minP", "maxP"))) {
+    stop("Invalid method provided.")
+  }
+
   
-  ## Output initialization
+  ### Output initialization
   p.matrix = matrix(NA, nrow = num.data, ncol = p)
   colnames(p.matrix) = names(data.list[[1]][-1])
-  pooled.p.matrix = data.frame(matrix(NA, nrow = 4, ncol = p))
-  x = c("Fisher", "Stouffer", "minP", "maxP")
-  rownames(pooled.p.matrix) = x
+  
+  pooled.p.matrix = data.frame(matrix(NA, nrow = length(method), ncol = p))
+  rownames(pooled.p.matrix) = method
   colnames(pooled.p.matrix) = names(data.list[[1]][-1])
   test.performed = c()
 
-  ## Calculating p-matrix
+  ### Calculating p-matrix
   for (i in 1:length(data.list)) {
-    res = my.aov(data.list[[i]])
+    res = my.aov(data.list[[i]], alpha)
     p.matrix[i,] = res$p.value.vec
     test.performed = c(test.performed, res$test.performed)
   }
   
-  ## Calculating pooled p-matrix
+  ### Calculating pooled p-matrix
   for (i in 1:dim(p.matrix)[2]) {
-    pooled.p.matrix["Fisher", i] = fisher.pool(p.matrix[,i])
-    pooled.p.matrix["Stouffer", i] = stouffer.pool(p.matrix[,i])
-    pooled.p.matrix["minP", i] = min.pool(p.matrix[,i])
-    pooled.p.matrix["maxP", i] = max.pool(p.matrix[,i])
+    for (m in method) {
+      if (m == 'Fisher') {
+        pooled.p.matrix[m, i] = fisher.pool(p.matrix[,i])
+      } else if (m == 'Stouffer') {
+        pooled.p.matrix[m, i] = stouffer.pool(p.matrix[,i])
+      } else if (m == 'minP') {
+        pooled.p.matrix[m, i] = min.pool(p.matrix[,i])
+      } else if (m == 'maxP') {
+        pooled.p.matrix[m, i] = max.pool(p.matrix[,i])
+      } else {
+        stop('Unknown pooling method')
+      }
+    }
   }
   
   ## Getting pooled p-matrix by R package: JumpTest  
-  builtin.pooled.p = rbind(ppool(t(p.matrix), method = "FI")@pvalue,
-          ppool(t(p.matrix), method = "SI")@pvalue,
-          ppool(t(p.matrix), method = "MI")@pvalue,
-          ppool(t(p.matrix), method = "MA")@pvalue)
-  rownames(builtin.pooled.p) = x
+  #builtin.pooled.p = rbind(ppool(t(p.matrix), method = "FI")@pvalue,
+  #        ppool(t(p.matrix), method = "SI")@pvalue,
+  #        ppool(t(p.matrix), method = "MI")@pvalue,
+  #        ppool(t(p.matrix), method = "MA")@pvalue)
+  #rownames(builtin.pooled.p) = x
 
   return(list(p.matrix=p.matrix, 
               pooled.p.matrix=pooled.p.matrix, 
-              builtin.pooled.p=builtin.pooled.p,
+              #builtin.pooled.p=builtin.pooled.p,
               test.performed=test.performed))
 
 }

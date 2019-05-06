@@ -1,8 +1,22 @@
-my.aov = function(data) {
+#' Illustration of my.aov()
+#'
+#' Creates a plot of the crayon colors in \code{\link{brocolors}}
+#'
+#' @param p.vals vector of p-values
+#'
+#' @return Return a vector of pooled p-values calculated by Fisher's pooling method.
+#'
+#' @examples
+#' x = runif(10)
+#' fisher.pool(x)
+#'
+#' @export
+#' 
+my.aov = function(data, alpha=0.05) {
   p = dim(data)[2] - 1
   p.value.vec = rep(NA, p)
+  p.alpha = alpha
   test.performed = c()
-  p.alpha = 0.05
   
   for (k in 1:p) {
     shapiro.vec = c()

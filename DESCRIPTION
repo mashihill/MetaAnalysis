@@ -7,3 +7,5 @@ Author: Yen-An Chen <yen-an.chen@stonybrook.edu>
 Maintainer: Yen-An Chen <yen-an.chen@stonybrook.edu>
 RoxygenNote: 6.1.1
 License: MIT + file LICENSE
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
