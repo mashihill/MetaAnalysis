@@ -1,6 +1,6 @@
 ---
 title: "Introduction to MetaAnalysis"
-author: "TODO"
+author: "Yen-An Chen, Wendy Lian, Siwei Chen, Peter Gonatas"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -12,21 +12,20 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 Introduction
 ------------
 
-The purpose of this package is to take a series of data sets containing p biomarkers as represented in the columns of the data frame, and calculate a series of p-values for each column, as well as run a pooling method based on user input.
+The purpose of this package is to take a series of data sets containing $p$ biomarkers as represented in the columns of the data frame, and calculate a series of p-values for each column, as well as run a pooling method based on user input.
 
 Installing
 ----------
 
-The easiest way to get mega.analysis is to install the whole package, use the following :
+To install MetaAnalysis package from source, open terminal application and enter command:
 
-`install.packages(mega.analysis)`
-
-And then to load it, use the following:
-
-`library(mega.analysis)`
+```bash 
+R CMD INSTALL [PATH_TO_FILE]/MetaAnalysis_0.1.tar.gz
+```
 
 Workflow
 --------
@@ -41,10 +40,10 @@ you can use: `meta.analysis(...,method)` to compute pooled p value for different
 
 **Pooling Commands**
 
-+ Fisher: set 	method=”Fisher”
-+ Stouffer: set	 method=”Stouffer”
-+ MinP: set 	method=”minP”
-+ MaxP: set 	method=”maxP”
+* Fisher: set method=`'Fisher'`
+* Stouffer: set method=`'Stouffer'`
+* MinP: set	method=`'minP'`
+* MaxP: set	method=`'maxP'`
 
 ```{r, eval=F}
 set.seed(123)
@@ -55,18 +54,18 @@ meta.analysis(data1,data2)
 ```
 
 
-*Please note that setting the type is case sensitive, and will default to all cases if not. Ex: typing “stouffer” instead of “Stouffer” will output all tests instead of just the Stouffer test.*
+*Please note that setting the type is case sensitive, and will default to `'Fisher'`*
 
 # Pooling Methods
 
 1. Fisher's Method
-  The Fisher's method sums up the log-transformed p-values obtained from individual studies.Fisher's statistic $\chi_{Fisher}^{2} = -2 \sum_{i=1}^K log(p_i)$ follows a $\chi^{2}$ distribution with $2K$ degrees of freedom under the null hypothesis. Smaller p-values contribute larger scores to the Fisher's statistic.
+  The Fisher's method sums up the log-transformed p-values obtained from individual studies. Fisher's statistic $\chi_{Fisher}^{2} = -2 \sum_{i=1}^K log(p_i)$ follows a $\chi^{2}$ distribution with $2K$ degrees of freedom under the null hypothesis. Smaller p-values contribute larger scores to the Fisher's statistic.
   
 2. Stouffer's Method
-  Stouffer's methods sums the inverse normal trasformed p-values. Stouffer's statistic $T\_Stouffer = \sum_{i=1}^K \frac{\Phi^{-1}(p_i)}{\sqrt{K}}$ ( $\Phi$ is the cdf of a standard normal distribution) follows a standard normal distribution under the null hypothesis. Similar to Fisher's method, smaller p-values contribute more to the Stouffer's score.
+  Stouffer's methods sums the inverse normal trasformed p-values. Stouffer's statistic $T = \sum_{i=1}^K \frac{\Phi^{-1}(p_i)}{\sqrt{K}}$ ( $\Phi$ is the cdf of a standard normal distribution) follows a standard normal distribution under the null hypothesis. Similar to Fisher's method, smaller p-values contribute more to the Stouffer's score.
   
 3. Minimum p-value Method
-  The minimun p-value method take the minimum p-value among the K studies as the test statistic. It follows a beta distribution with degrees of freedom $\alpha = 1$ and $\beta = K$ under the null hypothesis.
+  The minimun p-value method take the minimum p-value among the $K$ studies as the test statistic. It follows a beta distribution with degrees of freedom $\alpha = 1$ and $\beta = K$ under the null hypothesis.
   
 4. Maximum p-value Method
   The maximum p-value method take the maximum p-value as the test statistic. It follows a beta distribution with degrees of freedom $\alpha = K$ and $\beta = 1$ under the null hypothesis.
@@ -74,36 +73,42 @@ meta.analysis(data1,data2)
 # Example
 
 1. Input dataframes
-  * The number of input dataframes should between 2 and 5
-  * Each dataframe should have the same number of columns
-  * The function mata.analysis() will automatically check if all inputs meet requirements
+    + The number of input dataframes should between 2 and 5
+    + Each dataframe should have the same number of columns
+    + The function `mata.analysis()` will automatically check if all inputs meet requirements
+    + If not specified, the default level of confidence is $\alpha = 0.05$ ######
+
 ```{r}
 library(MetaAnalysis)
-set.seed(123)
-p <- 20
+set.seed(123)  ## Fix seed for reproducible result
+p <- 6
 # dataframe1 has 20 columns and 3 groups
 data1 <- data.frame(group=sample(1:3,300,replace=TRUE),matrix(rnorm(p*300),ncol=p))
+head(data1)
+
 # dataframe1 has 20 columns and 2 groups
 data2 <- data.frame(group=sample(1:2,200,replace=TRUE),matrix(rnorm(p*200),ncol=p))
 # dataframe1 has 20 columns and 5 groups
 data3 <- data.frame(group=sample(1:5,500,replace=TRUE),matrix(rnorm(p*500),ncol=p))
+
+
+res = meta.analysis(data1, data2, data3, method=c('Fisher', 'Stouffer', 'minP', 'maxP'), alpha = 0.01)
 ```
-  * Input data error: if number of dataframes are out of limit, or number of columns are not equal.
+    + Input data error: if number of dataframes are out of limit, or number of columns are not equal.
 
 2. Obtaining p-value matrix
-  * #######If not specified, the default level of confidence is $\alpha = 0.05$ ######
-```{r, eval=FALSE}
-meta.analysis(data1, data2, data3, method='test', alpha = 0.01)$p.matrix
+```{r}
+res$p.matrix
 ```
 3. Pooling p-values
-  * 4 pooling methods introduced above are available
-  * The default results will show Fisher, Stouffer, minP, and maxP in a list
-```{r, eval=FALSE}
-meta.analysis(data1, data2, data3, method='test')$pooled.p.matrix
+    + 4 pooling methods introduced above are available
+    + The default results will show Fisher, Stouffer, minP, and maxP in a matrix.
+```{r}
+res$pooled.p.matrix
 ```
-4. Tests performed
-  * User can get a record of the results from tests performed. For example, shapiro test for normality. 
-```{r, eval=FALSE}
-meta.analysis(data1, data2, data3, method='test')$test.performed
+4. Tests performed ##TODO##
+    + User can get a record of the results from tests performed. For example, shapiro test for normality. 
+```{r}
+res$test.performed
 ```
   
