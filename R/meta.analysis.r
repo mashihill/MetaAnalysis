@@ -33,7 +33,7 @@ source('./R/my.aov.R')
 #'
 #' @export
 #' 
-meta.analysis = function(..., method='Fisher', alpha=0.05) {
+meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), alpha=0.05) {
   
   data.list = list(...)
   num.data = length(data.list)

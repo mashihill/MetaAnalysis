@@ -17,7 +17,7 @@
 #' @export
 #' 
 my.aov = function(data, alpha=0.05) {
-  p = dim(data)[2] - 1
+  p = dim(data)[2] - 1  # Number of biomarkers
   p.value.vec = rep(NA, p)
   p.alpha = alpha
   test.performed = c()
@@ -58,10 +58,10 @@ my.aov = function(data, alpha=0.05) {
         f.pval = var.test(get(bioname, subdf1), get(bioname, subdf2))$p.value
         
         if(f.pval > 0.05) {  ## Equal variance
-          test.performed = c(test.performed, 'T (Equal Var)')
+          test.performed = c(test.performed, 'T(eq)')
           p.val <- t.test(get(bioname, subdf1),get(bioname, subdf2),var.equal=T)$p.value
         } else {  ## Unequal variance
-          test.performed = c(test.performed, 'T (Unqueal Var)')
+          test.performed = c(test.performed, 'T(Uneq)')
           p.val <- t.test(get(bioname, subdf1),get(bioname, subdf2),var.equal=F)$p.value
         }
       }

@@ -68,18 +68,18 @@ you can use: `meta.analysis(...,method)` to compute pooled p value for different
 ```{r}
 library(MetaAnalysis)
 set.seed(123)  ## Fix seed for reproducible result
-p <- 6
-# dataframe1 has 20 columns and 3 groups
-data1 <- data.frame(group=sample(1:3,300,replace=TRUE),matrix(rnorm(p*300),ncol=p))
+p <- 5
+# dataframe1 has 5 columns and 3 groups
+data1 <- data.frame(group=sample(1:3,200,replace=TRUE),matrix(rnorm(p*200),ncol=p))
 head(data1)
 
-# dataframe1 has 20 columns and 2 groups
-data2 <- data.frame(group=sample(1:2,200,replace=TRUE),matrix(rnorm(p*200),ncol=p))
-# dataframe1 has 20 columns and 5 groups
-data3 <- data.frame(group=sample(1:5,500,replace=TRUE),matrix(rnorm(p*500),ncol=p))
+# dataframe1 has 5 columns and 2 groups
+data2 <- data.frame(group=sample(1:2,150,replace=TRUE),matrix(rnorm(p*150),ncol=p))
+# dataframe1 has 5 columns and 4 groups
+data3 <- data.frame(group=sample(1:4,400,replace=TRUE),matrix(rnorm(p*400),ncol=p))
 
 
-res = meta.analysis(data1, data2, data3, method=c('Fisher', 'Stouffer', 'minP', 'maxP'), alpha = 0.01)
+res = meta.analysis(data1, data2, data3, method=c('Fisher', 'Stouffer', 'minP', 'maxP'), alpha = 0.05)
 ```
 *Input data error: if number of dataframes are out of limit, or number of columns are not equal.*
 
@@ -87,15 +87,17 @@ res = meta.analysis(data1, data2, data3, method=c('Fisher', 'Stouffer', 'minP', 
 ```{r}
 res$p.matrix
 ```
-3. Pooling p-values
-    + 4 pooling methods introduced above are available.
-    + The default results will show Fisher, Stouffer, minP, and maxP in a matrix.
-```{r}
-res$pooled.p.matrix
-```
-4. Tests performed ##TODO##
+
+3. Tests performed
     + User can get a record of the results from tests performed.
 ```{r}
 res$test.performed
 ```
   
+4. Pooling p-values
+    + 4 pooling methods introduced above are available.
+    + The default results will show Fisher, Stouffer, minP, and maxP in a matrix.
+```{r}
+res$pooled.p.matrix
+```
+
