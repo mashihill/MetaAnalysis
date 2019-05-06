@@ -1,15 +1,16 @@
 #' Illustration of fisher.pool()
 #'
-#' @param p.vals vector of p-values
+#' 
+#' @param p.vals A vector of p-values
 #'
-#' @return Return a pooled p-values calculated by Fisher's pooling method.
+#' @return Return a pooled p-value calculated by Fisher's pooling method.
 #'
 #' @examples
 #' x = runif(10)
 #' fisher.pool(x)
 #'
 #' @export
-#' 
+#'
 fisher.pool = function(p.vals) {
   X2 = -2*sum(log(p.vals))
   pooled.p = pchisq(X2, 2*length(p.vals), lower.tail = F)
@@ -18,9 +19,9 @@ fisher.pool = function(p.vals) {
 
 #' Illustration of stouffer.pool()
 #'
-#' @param p.vals vector of p-values
+#' @param p.vals A vector of p-values
 #'
-#' @return Return a pooled p-values calculated by Stouffer's pooling method.
+#' @return Return a pooled p-value calculated by Stouffer's pooling method.
 #'
 #' @examples
 #' x = runif(10)
@@ -37,9 +38,9 @@ stouffer.pool = function(p.vals) {
 
 #' Illustration of min.pool()
 #'
-#' @param p.vals vector of p-values
+#' @param p.vals A vector of p-values
 #'
-#' @return Return a pooled p-values calculated by minP pooling method.
+#' @return Return a pooled p-value calculated by minP pooling method.
 #'
 #' @examples
 #' x = runif(10)
@@ -56,9 +57,9 @@ min.pool = function(p.vals) {
 
 #' Illustration of max.pool()
 #'
-#' @param p.vals vector of p-values
+#' @param p.vals A vector of p-values
 #'
-#' @return Return a pooled p-values calculated by maxP pooling method.
+#' @return Return a pooled p-value calculated by maxP pooling method.
 #'
 #' @examples
 #' x = runif(10)

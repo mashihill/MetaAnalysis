@@ -58,10 +58,10 @@ my.aov = function(data, alpha=0.05) {
         f.pval = var.test(get(bioname, subdf1), get(bioname, subdf2))$p.value
         
         if(f.pval > 0.05) {  ## Equal variance
-          test.performed = c(test.performed, 'Equal T')
+          test.performed = c(test.performed, 'T (Equal Var)')
           p.val <- t.test(get(bioname, subdf1),get(bioname, subdf2),var.equal=T)$p.value
         } else {  ## Unequal variance
-          test.performed = c(test.performed, 'Unequal T')
+          test.performed = c(test.performed, 'T (Unqueal Var)')
           p.val <- t.test(get(bioname, subdf1),get(bioname, subdf2),var.equal=F)$p.value
         }
       }

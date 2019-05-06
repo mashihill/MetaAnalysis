@@ -64,13 +64,13 @@ meta.analysis = function(..., method='Fisher', alpha=0.05) {
   pooled.p.matrix = data.frame(matrix(NA, nrow = length(method), ncol = p))
   rownames(pooled.p.matrix) = method
   colnames(pooled.p.matrix) = names(data.list[[1]][-1])
-  test.performed = c()
+  test.performed = data.frame(p.matrix)
 
   ### Calculating p-matrix
   for (i in 1:length(data.list)) {
     res = my.aov(data.list[[i]], alpha)
     p.matrix[i,] = res$p.value.vec
-    test.performed = c(test.performed, res$test.performed)
+    test.performed[i,] = res$test.performed
   }
   
   ### Calculating pooled p-matrix

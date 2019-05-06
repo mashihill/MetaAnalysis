@@ -1,5 +1,5 @@
 #library(dplyr)
-#source('./R/meta.analysis.R')
+source('./R/meta.analysis.R')
 #library(MetaAnalysis)
 
 #set.seed(123)
@@ -24,6 +24,10 @@ data3 <- data.frame(group=sample(1:4,400,replace=TRUE), matrix(rnorm(6*400),ncol
 
 res = meta.analysis(data1, data2, data3, method=c('Fisher', 'Stouffer', 'minP', 'maxP'))
 p.matrix = res$p.matrix
-pooled.p.matrix = res$pooled.p.matrix
 test.performed = res$test.performed
+pooled.p.matrix = res$pooled.p.matrix
+
+p.matrix
+test.performed
 pooled.p.matrix
+
