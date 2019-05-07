@@ -30,4 +30,3 @@ pooled.p.matrix = res$pooled.p.matrix
 p.matrix
 test.performed
 pooled.p.matrix
-

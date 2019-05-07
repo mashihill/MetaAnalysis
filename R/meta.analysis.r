@@ -11,8 +11,8 @@ source('./R/my.aov.R')
 #' @return A list with components:
 #' \describe{
 #'   \item{\code{p.matrix}}{A p-values matrix of dimension (number of dataframes, number of biomarkers).}
+#'   \item{\code{test.performed}}{A matrix of method (\code{string}) of statistical test used.}
 #'   \item{\code{pooled.p.matrix}}{A matrix of pooled p-values for each biomarkers.}
-#'   \item{\code{test.performed}}{A list of method (\code{string}) of statistical test used.}
 #' }
 #'
 #' @examples
@@ -34,11 +34,11 @@ source('./R/my.aov.R')
 #' @export
 #' 
 meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), alpha=0.05) {
-  
+
+  method = c(method)
   data.list = list(...)
   num.data = length(data.list)
-  p = dim(data.list[[1]])[2] - 1
-  method = c(method)
+  p = dim(data.list[[1]])[2] - 1  # Number of biomarkers
   
   ### Error handling
   if (num.data < 2) {
@@ -58,13 +58,18 @@ meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), al
   }
 
   ### Output initialization
+  # p value matrix
   p.matrix = matrix(NA, nrow = num.data, ncol = p)
   colnames(p.matrix) = names(data.list[[1]][-1])
   
+  # test performed matrix
+  test.performed = data.frame(p.matrix)
+  
+  # pooled p value matrix
   pooled.p.matrix = data.frame(matrix(NA, nrow = length(method), ncol = p))
   rownames(pooled.p.matrix) = method
   colnames(pooled.p.matrix) = names(data.list[[1]][-1])
-  test.performed = data.frame(p.matrix)
+  
 
   ### Calculating p-matrix
   for (i in 1:length(data.list)) {
@@ -90,16 +95,18 @@ meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), al
     }
   }
   
+  print('her')
+  
   ## Getting pooled p-matrix by R package: JumpTest  
-  #builtin.pooled.p = rbind(ppool(t(p.matrix), method = "FI")@pvalue,
-  #        ppool(t(p.matrix), method = "SI")@pvalue,
-  #        ppool(t(p.matrix), method = "MI")@pvalue,
-  #        ppool(t(p.matrix), method = "MA")@pvalue)
+  builtin.pooled.p = rbind(ppool(t(p.matrix), method = "FI")@pvalue,
+          ppool(t(p.matrix), method = "SI")@pvalue,
+          ppool(t(p.matrix), method = "MI")@pvalue,
+          ppool(t(p.matrix), method = "MA")@pvalue)
   #rownames(builtin.pooled.p) = x
 
   return(list(p.matrix=p.matrix, 
               pooled.p.matrix=pooled.p.matrix, 
-              #builtin.pooled.p=builtin.pooled.p,
+              builtin.pooled.p=builtin.pooled.p,
               test.performed=test.performed))
 
 }
