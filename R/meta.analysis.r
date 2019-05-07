@@ -1,4 +1,3 @@
-#library(JumpTest)
 source('./R/pooling.R')
 source('./R/my.aov.R')
 
@@ -28,14 +27,14 @@ source('./R/my.aov.R')
 #' ## 2 dataframes with Fisher pooling method, alpha = 0.01
 #' res = meta.analysis(data1, data2, method='Fisher', alpha=0.01)
 #' p.matrix = res$p.matrix
-#' pooled.p.matrix = res$pooled.p.matrix
 #' test.performed = res$test.performed
+#' pooled.p.matrix = res$pooled.p.matrix
 #'
 #' ## 3 dataframes with Stouffer, minP, maxP pooling methods, alpha as default value (0.05) 
 #' res = meta.analysis(data1, data2, data3, method=c('Stouffer', 'minP', 'maxP'))
 #' p.matrix = res$p.matrix
-#' pooled.p.matrix = res$pooled.p.matrix
 #' test.performed = res$test.performed
+#' pooled.p.matrix = res$pooled.p.matrix
 #'
 #' @export
 #' 
@@ -43,7 +42,7 @@ meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), al
 
   method = c(method)
   data.list = list(...)
-  num.data = length(data.list)
+  num.data = length(data.list)  # Number of data user input
   p = dim(data.list[[1]])[2] - 1  # Number of biomarkers
   
   ### Error handling
@@ -52,15 +51,15 @@ meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), al
   }
   
   if (num.data > 5) {
-    stop("Number of data is greater than 5.")
+    stop("Number of data exceeds 5.")
   }
   
   if (!all(sapply(data.list, dim)[2,] == (p+1))) {
-    stop("Number of columns are different.")
+    stop("Number of columns across data are different.")
   }
   
   if (!all(method %in% c("Fisher", "Stouffer", "minP", "maxP"))) {
-    stop("Invalid method provided.")
+    stop("Invalid method provided. Please look up the help function of meta.analysis()")
   }
 
   ### Output initialization
@@ -84,7 +83,7 @@ meta.analysis = function(..., method=c('Fisher', 'Stouffer', 'minP', 'maxP'), al
     test.performed[i,] = res$test.performed
   }
   
-  ### Calculating pooled p-matrix
+  ### Calculate pooled p-matrix
   for (i in 1:dim(p.matrix)[2]) {
     for (m in method) {
       if (m == 'Fisher') {

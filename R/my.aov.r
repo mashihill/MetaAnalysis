@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' data <- data.frame(group=sample(1:3,200,replace=TRUE), matrix(rnorm(6*200),ncol=6))
-#' res = my.aov(data.list, 0.1)
+#' res = my.aov(data, 0.1)
 #' res$p.value.vec
 #'
 #' @export
@@ -26,13 +26,13 @@ my.aov = function(data, alpha=0.05) {
     shapiro.vec = c()
     p.val = NA
     
-    ## check normality
+    ## check normality using Shapiro test
     for (ids in unique(data$group)) {
       subdf <- subset(x=data, subset=group==ids)
       shapiro.vec <- c(shapiro.vec, shapiro.test(subdf[,k+1])$p.value)
     }
     
-    if (length(unique(data$group)) > 2) {
+    if (length(unique(data$group)) > 2) { ## group size >2
       if (min(shapiro.vec) < p.alpha) { ## Not Normal
         test.performed = c(test.performed, 'Kruskal')
         res.aov = kruskal.test(data[,k+1]~factor(data[,1]))
