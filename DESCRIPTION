@@ -2,7 +2,7 @@ Package: MetaAnalysis
 Version: 0.1
 Date: 2019-04-19
 Title: MetaAnalysis
-Description: AMS 597 project.
+Description: Meta Analysis.
 Authors@R: c(person("Yen-An", "Chen", email = "yen-an.chen@stonybrook.edu", role = "cre"))
 Maintainer: Yen-An Chen <yen-an.chen@stonybrook.edu>
 RoxygenNote: 6.1.1
