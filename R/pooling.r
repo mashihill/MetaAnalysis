@@ -36,26 +36,28 @@ stouffer.pool = function(p.vals) {
   return(pooled.p)
 }
 
-#' Illustration of min.pool()
-#'
+#' Illustration of minp.pool()
+#' test
+#' 
+#' test
 #' @param p.vals A vector of p-values
 #'
 #' @return Return a pooled p-value calculated by minP pooling method.
 #'
 #' @examples
 #' x = runif(10)
-#' min.pool(x)
+#' minp.pool(x)
 #'
 #' @export
 #' 
-min.pool = function(p.vals) {
+minp.pool = function(p.vals) {
   k = length(p.vals)
   T_min = min(p.vals)
   pooled.p = pbeta(T_min, 1, k)
   return(pooled.p)
 }
 
-#' Illustration of max.pool()
+#' Illustration of maxp.pool()
 #'
 #' @param p.vals A vector of p-values
 #'
@@ -63,11 +65,11 @@ min.pool = function(p.vals) {
 #'
 #' @examples
 #' x = runif(10)
-#' max.pool(x)
+#' maxp.pool(x)
 #'
 #' @export
 #' 
-max.pool = function(p.vals) {
+maxp.pool = function(p.vals) {
   k = length(p.vals)
   T_max = max(p.vals)
   pooled.p = pbeta(T_max, k, 1)
