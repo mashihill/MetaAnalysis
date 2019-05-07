@@ -1,10 +1,10 @@
 ---
-title: "Introduction to MetaAnalysis"
-author: "Yen-An Chen, Wendy Lian, Siwei Chen, Peter Gonatas"
+title: "MetaAnalysis"
+author: "Yen-An Chen"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: github_document
 vignette: >
-  %\VignetteIndexEntry{Introduction to MetaAnalysis}
+  %\VignetteIndexEntry{MetaAnalysis}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
